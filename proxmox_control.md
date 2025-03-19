@@ -13,7 +13,7 @@
 
 ## Bubble Card Styling
 
-Here's my list of Bubblecard styling snippets
+Here's my list of [Bubblecard styling snippets](./bubblecard/bubblecard_styling_snippets.md)
 
 ## Credits
 

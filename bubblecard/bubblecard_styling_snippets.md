@@ -21,6 +21,9 @@ input_boolean:
 
 **Insert Example Here**
 
+<details>
+  <summary>YAML Code</summary>
+
 ```yaml
 type: custom:bubble-card
 card_type: button
@@ -39,9 +42,14 @@ button_action:
     tap_action:
     action: toggle
 ```
+</details>
+
 ## Rotating Sub-Button Icon
 
 ** Insert Example Here**
+
+<details>
+  <summary>YAML Code</summary>
 
 ```yaml
 type: custom:bubble-card
@@ -82,5 +90,6 @@ button_action:
   hold_action:
     action: none
 ```
+</details>
 
 
