@@ -56,6 +56,8 @@ button_action:
 ```
 </details>
 
+[🔼 Back to top](#bubble-card-styling-snippets)
+
 ## Rotating Sub-Button Icon
 
 When the input boolean is toggled (either remotely or by pressing the sub-button), the sub-button icon changes to a loading symbol and rotates
@@ -105,6 +107,8 @@ button_action:
     action: none
 ```
 </details>
+
+[🔼 Back to top](#bubble-card-styling-snippets)
 
 ## Rotating Sub-Button-1 with Color change
 
@@ -157,6 +161,8 @@ button_action:
 
 ```
 </details>
+
+[🔼 Back to top](#bubble-card-styling-snippets)
 
 ## 2 Rotating Sub-Buttons with Color change
 
@@ -221,6 +227,8 @@ button_action:
     action: none
 ```
 </details>
+
+[🔼 Back to top](#bubble-card-styling-snippets)
 
 ## Credits
 
