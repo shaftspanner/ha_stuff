@@ -150,7 +150,7 @@ button_action:
 ```
 </details>
 
-## 2 Rotating Sub-Button with Color change
+## 2 Rotating Sub-Buttons with Color change
 
 When the input boolean is toggled (either remotely or by pressing the sub-button), the sub-button-1 icon changes to a loading symbol, changes color and rotates.  The same happens with sub-button-2
 
