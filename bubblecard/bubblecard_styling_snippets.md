@@ -213,3 +213,9 @@ button_action:
     action: none
 ```
 </details>
+
+## Credits
+
+Many thanks to the following who helped me with these snippets:
+
+- [u/aponomar](https://www.reddit.com/user/aponomar/) - Help with the animated icons
