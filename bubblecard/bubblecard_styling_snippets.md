@@ -15,6 +15,7 @@ The snippets rely on having 2 toggle helpers defined `temp_toggle` and `temp_tog
 input_boolean:
   temp_toggle:
     name: Toggle to demonstrate button styling
+input_boolean:
   temp_toggle_2:
     name: Another toggle to demonstrate button styling
 ```
