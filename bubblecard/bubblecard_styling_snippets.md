@@ -19,6 +19,13 @@ input_boolean:
     name: Another toggle to demonstrate button styling
 ```
 
+## Index
+
+- [Rotating Icon](#rotating-icon)
+- [Rotating Sub-Button Icon](#rotating-sub-button-icon)
+- [Rotating Sub-Button-1 with Color Change](#rotating-sub-button-1-with-color-change)
+- [2 Rotating Sub-buttons with Color Change](#2-rotating-sub-buttons-with-color-change)
+
 ## Rotating Icon
 
 The existing (or default) icon rotates when the linked input boolean is `on`.  In this case, that could be triggered remotely (e.g. a manual switch) or by toggling the button itself
