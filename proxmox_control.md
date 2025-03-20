@@ -26,7 +26,7 @@ The entity `binary_sensor.lxc_ollama_206_status` is a binary sensor - it's value
 
 Using this, I could build a flow as follows:
 
-![Flow for pressing VM power or reboot buttons](./media/proxmox_button_flow.excalidraw.svg)
+![Flow for pressing VM power or reboot buttons](./media/proxmox_button_flow.png)
 
 ## Bubble Card Styling
 
