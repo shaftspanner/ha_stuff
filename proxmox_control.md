@@ -13,7 +13,7 @@
 
 ## Bubble Card Styling
 
-Here's my list of [Bubblecard styling snippets](./bubblecard/bubblecard_styling_snippets.md)
+Here's my list of [Bubblecard styling snippets](./bubblecard/bubblecard_styling_snippets.md).  The most relevant snippet for this example is [2 Rotating Sub-Buttons with color and icon change](./bubblecard/bubblecard_styling_snippets.md#2-rotating-sub-buttons-with-color-change)
 
 ## Credits
 

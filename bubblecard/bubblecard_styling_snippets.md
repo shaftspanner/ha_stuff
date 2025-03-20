@@ -25,13 +25,13 @@ input_boolean:
 - [Rotating Icon](#rotating-icon)
 - [Rotating Sub-Button Icon](#rotating-sub-button-icon)
 - [Rotating Sub-Button-1 with Color Change](#rotating-sub-button-1-with-color-change)
-- [2 Rotating Sub-buttons with Color Change](#2-rotating-sub-buttons-with-color-change)
+- [2 Rotating Sub-buttons with Color and Icon Change](#2-rotating-sub-buttons-with-color-and-icon-change)
 
 ## Rotating Icon
 
-The existing (or default) icon rotates when the linked input boolean is `on`.  In this case, that could be triggered remotely (e.g. a manual switch) or by toggling the button itself
+![Bubble Card button with icon that rotates when the button is clicked](../media/rotating_icon.gif)
 
-**Insert Example Here**
+The existing (or default) icon rotates when the linked input boolean is `on`.  In this case, that could be triggered remotely (e.g. a manual switch) or by toggling the button itself
 
 <details>
   <summary>YAML Code</summary>
@@ -62,7 +62,7 @@ button_action:
 
 When the input boolean is toggled (either remotely or by pressing the sub-button), the sub-button icon changes to a loading symbol and rotates
 
-**Insert Example Here**
+![Bubble Card button with sub-button.  Sub-button icon rotates when the button is clicked](../media/rotating_sub_button_icon.gif)
 
 <details>
   <summary>YAML Code</summary>
@@ -114,7 +114,7 @@ button_action:
 
 When the input boolean is toggled (either remotely or by pressing the sub-button), the sub-button icon changes to a loading symbol, changes color and rotates
 
-**Insert Example Here**
+![Bubble Card with sub-button.  When the sub-button is clicked, the icon changes to a loading symbol, changes color and rotates](../media/rotating_sub_button_icon_with_color_change.gif)
 
 <details>
   <summary>YAML Code</summary>
@@ -164,11 +164,11 @@ button_action:
 
 [🔼 Back to top](#bubble-card-styling-snippets)
 
-## 2 Rotating Sub-Buttons with Color change
+## 2 Rotating Sub-Buttons with Color and Icon Change
 
 When the input boolean is toggled (either remotely or by pressing the sub-button), the sub-button-1 icon changes to a loading symbol, changes color and rotates.  The same happens with sub-button-2
 
-**Insert Example Here**
+![Bubble Card with 2 sub-buttons.  When the each sub-button is clicked, the icon changes to a loading symbol, changes color and rotates](../media/2_rotating_sub_button_icons_with_color_change.gif)
 
 <details>
   <summary>YAML Code</summary>
@@ -235,3 +235,6 @@ button_action:
 Many thanks to the following who helped me with these snippets:
 
 - [u/aponomar](https://www.reddit.com/user/aponomar/) - Help with the animated icons
+
+
+[def]: ../media/rotating_icon.gif
