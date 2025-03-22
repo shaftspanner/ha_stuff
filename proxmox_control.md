@@ -7,16 +7,37 @@
 
 ## Steps
 
-1. Setup Proxmox access within HA
+1. Setup [Proxmox access](#proxmox-access) within HA
 2. Setup a [python set_state script](#python-set_state-script)
 3. Create the [Bubble Card Buttons](#bubble-card-styling)
 4. Generate [single script to handle multiple conditions](#generate-single-script-to-handle-multiple-conditions) (start/shutdown/reboot)
+
+## Proxmox Access
+
+There is a core Proxmox VE integration within home assistant, but there's also a HACS custom intergration that provides some additional capabilities such as allowing you to poll vvarious data and controls from your instance.
+
+The HACS integration is [here](https://github.com/dougiteixeira/proxmoxve).  This should expose all of your VMs and LXCs as devices but by default entities and sensors are disabled.  You'll need to select which entities will be useful and you want to enable.  
+I've enabled the following controls:
+
+![Proxmox enabled controls](./media/proxmox_controls.png)
+
+and the following sensors:
+
+![alt text](./media/proxmox_sensors.png)
+
+There are more that can be enabled, but I felt these gave me sufficient information for my needs.
+
+[🔼 Back to top](#proxmox-container-and-virtual-machine-control)
 
 ## Python Set_State Script
 
 ### Problem - Button presses are instantaneous
 
 The Proxmox HA integration exposes buttons to start, shutdown and reboot VMs and LXCs.  However a button press is an instantaneous thing - you press it, a command is sent to Proxmox, but you don't get any feedback until seconds later when the status of the target eventually changes and feeds back to HA.  This leaves you guessing whether the command has actually registered properly.
+
+
+<details>
+  <summary>Solution</summary>
 
 ### Solution
 
@@ -44,7 +65,10 @@ data:
 
 and here's an example of it in action
 
-**Insert example here**
+**Insert example here** %%%%%
+
+</details>
+
 
 [🔼 Back to top](#proxmox-container-and-virtual-machine-control)
 
@@ -118,7 +142,7 @@ The script flow is shown below:
 
 ![Flow for Proxmox control script](./media/proxmox_control_script.png)
 
-
+**Insert full script here** %%%%%
 
 
 [🔼 Back to top](#proxmox-container-and-virtual-machine-control)
