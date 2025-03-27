@@ -1,0 +1,194 @@
+type: vertical-stack
+cards:
+  - type: custom:bubble-card
+    card_type: button
+    button_type: state
+    entity: binary_sensor.lxc_photos_204_status
+    sub_button:
+      - entity: button.lxc_photos_204_start
+        name: Start
+        tap_action:
+          action: perform-action
+          perform_action: script.proxmox_lxc_control
+          target: {}
+          data:
+            target: lxc_photos_204
+            action: toggle
+        icon: mdi:server
+      - entity: button.lxc_photos_204_reboot
+        show_icon: true
+        name: Reboot
+        icon: mdi:restart
+        tap_action:
+          action: perform-action
+          perform_action: script.proxmox_lxc_control
+          target: {}
+          data:
+            target: lxc_photos_204
+            action: reboot
+    name: LXC Photos (204)
+    styles: >-
+      .bubble-sub-button-1 { 
+        background-color: ${hass.states['binary_sensor.lxc_photos_204_status'].state === 'pending' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)'  } !important;
+        animation: ${hass.states['binary_sensor.lxc_photos_204_status'].state === 'pending' ? 'slow-rotate 2s linear infinite' :''};
+      }   .bubble-sub-button-2 { 
+        background-color: ${hass.states['binary_sensor.lxc_photos_204_status'].state === 'rebooting' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)' } !important;
+        animation: ${hass.states['binary_sensor.lxc_photos_204_status'].state === 'rebooting' ? 'slow-rotate 2s linear infinite' : ''};
+      } 
+
+      @keyframes slow-rotate { 
+        0% { transform: rotate(0deg); } 
+        100% { transform: rotate(360deg); } 
+      }
+
+      ${subButtonIcon[0].setAttribute("icon",
+      hass.states['binary_sensor.lxc_photos_204_status'].state === 'pending' ?
+      'mdi:loading' 
+         : hass.states['binary_sensor.lxc_photos_204_status'].state === 'off' ? 'mdi:server' :'mdi:server-off' )}
+      ${subButtonIcon[1].setAttribute("icon",
+      hass.states['binary_sensor.lxc_photos_204_status'].state === 'rebooting' ?
+      'mdi:loading' :'mdi:reload' )}          
+  - type: custom:bubble-card
+    card_type: button
+    button_type: state
+    entity: binary_sensor.lxc_frigate_205_status
+    sub_button:
+      - entity: button.lxc_frigate_205_start
+        name: Start
+        tap_action:
+          action: perform-action
+          perform_action: script.proxmox_lxc_control
+          target: {}
+          data:
+            target: lxc_frigate_205
+            action: toggle
+        icon: mdi:server
+      - entity: button.lxc_frigate_205_reboot
+        show_icon: true
+        name: Reboot
+        icon: mdi:restart
+        tap_action:
+          action: perform-action
+          perform_action: script.proxmox_lxc_control
+          target: {}
+          data:
+            target: lxc_frigate_205
+            action: reboot
+    name: LXC Frigate (205)
+    styles: >-
+      .bubble-sub-button-1 { 
+        background-color: ${hass.states['binary_sensor.lxc_frigate_205_status'].state === 'pending' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)'  } !important;
+        animation: ${hass.states['binary_sensor.lxc_frigate_205_status'].state === 'pending' ? 'slow-rotate 2s linear infinite' :''};
+      }   .bubble-sub-button-2 { 
+        background-color: ${hass.states['binary_sensor.lxc_frigate_205_status'].state === 'rebooting' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)' } !important;
+        animation: ${hass.states['binary_sensor.lxc_frigate_205_status'].state === 'rebooting' ? 'slow-rotate 2s linear infinite' : ''};
+      } 
+
+      @keyframes slow-rotate { 
+        0% { transform: rotate(0deg); } 
+        100% { transform: rotate(360deg); } 
+      }
+
+      ${subButtonIcon[0].setAttribute("icon",
+      hass.states['binary_sensor.lxc_frigate_205_status'].state === 'pending' ?
+      'mdi:loading' 
+         : hass.states['binary_sensor.lxc_frigate_205_status'].state === 'off' ? 'mdi:server' :'mdi:server-off' )}
+      ${subButtonIcon[1].setAttribute("icon",
+      hass.states['binary_sensor.lxc_frigate_205_status'].state === 'rebooting'
+      ? 'mdi:loading' :'mdi:reload' )}          
+  - type: custom:bubble-card
+    card_type: button
+    button_type: state
+    entity: binary_sensor.lxc_ollama_206_status
+    sub_button:
+      - entity: button.lxc_ollama_206_start
+        name: Start
+        tap_action:
+          action: perform-action
+          perform_action: script.proxmox_lxc_control
+          target: {}
+          data:
+            target: lxc_ollama_206
+            action: toggle
+        icon: mdi:server
+      - entity: button.lxc_ollama_206_reboot
+        show_icon: true
+        name: Reboot
+        icon: mdi:restart
+        tap_action:
+          action: perform-action
+          perform_action: script.proxmox_lxc_control
+          target: {}
+          data:
+            target: lxc_ollama_206
+            action: reboot
+    name: LXC Ollama (206)
+    styles: >-
+      .bubble-sub-button-1 { 
+        background-color: ${hass.states['binary_sensor.lxc_ollama_206_status'].state === 'pending' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)'  } !important;
+        animation: ${hass.states['binary_sensor.lxc_ollama_206_status'].state === 'pending' ? 'slow-rotate 2s linear infinite' :''};
+      }   .bubble-sub-button-2 { 
+        background-color: ${hass.states['binary_sensor.lxc_ollama_206_status'].state === 'rebooting' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)' } !important;
+        animation: ${hass.states['binary_sensor.lxc_ollama_206_status'].state === 'rebooting' ? 'slow-rotate 2s linear infinite' : ''};
+      } 
+
+      @keyframes slow-rotate { 
+        0% { transform: rotate(0deg); } 
+        100% { transform: rotate(360deg); } 
+      }
+
+      ${subButtonIcon[0].setAttribute("icon",
+      hass.states['binary_sensor.lxc_ollama_206_status'].state === 'pending' ?
+      'mdi:loading' 
+         : hass.states['binary_sensor.lxc_ollama_206_status'].state === 'off' ? 'mdi:server' :'mdi:server-off' )}
+      ${subButtonIcon[1].setAttribute("icon",
+      hass.states['binary_sensor.lxc_ollama_206_status'].state === 'rebooting' ?
+      'mdi:loading' :'mdi:reload' )}          
+  - type: custom:bubble-card
+    card_type: button
+    button_type: state
+    entity: binary_sensor.lxc_pihole_209_status
+    sub_button:
+      - entity: button.lxc_pihole_209_start
+        name: Start
+        tap_action:
+          action: perform-action
+          perform_action: script.proxmox_lxc_control
+          target: {}
+          data:
+            target: lxc_pihole_209
+            action: toggle
+        icon: mdi:server
+      - entity: button.lxc_pihole_209_reboot
+        show_icon: true
+        name: Reboot
+        icon: mdi:restart
+        tap_action:
+          action: perform-action
+          perform_action: script.proxmox_lxc_control
+          target: {}
+          data:
+            target: lxc_pihole_209
+            action: reboot
+    name: LXC Pihole (209)
+    styles: >-
+      .bubble-sub-button-1 { 
+        background-color: ${hass.states['binary_sensor.lxc_pihole_209_status'].state === 'pending' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)'  } !important;
+        animation: ${hass.states['binary_sensor.lxc_pihole_209_status'].state === 'pending' ? 'slow-rotate 2s linear infinite' :''};
+      }   .bubble-sub-button-2 { 
+        background-color: ${hass.states['binary_sensor.lxc_pihole_209_status'].state === 'rebooting' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)' } !important;
+        animation: ${hass.states['binary_sensor.lxc_pihole_209_status'].state === 'rebooting' ? 'slow-rotate 2s linear infinite' : ''};
+      } 
+
+      @keyframes slow-rotate { 
+        0% { transform: rotate(0deg); } 
+        100% { transform: rotate(360deg); } 
+      }
+
+      ${subButtonIcon[0].setAttribute("icon",
+      hass.states['binary_sensor.lxc_pihole_209_status'].state === 'pending' ?
+      'mdi:loading' 
+         : hass.states['binary_sensor.lxc_pihole_209_status'].state === 'off' ? 'mdi:server' :'mdi:server-off' )}
+      ${subButtonIcon[1].setAttribute("icon",
+      hass.states['binary_sensor.lxc_pihole_209_status'].state === 'rebooting' ?
+      'mdi:loading' :'mdi:reload' )}          

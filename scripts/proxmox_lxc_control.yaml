@@ -1,0 +1,85 @@
+sequence:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ action | lower == 'reboot' }}"
+        sequence:
+          - action: button.press
+            metadata: {}
+            data: {}
+            target:
+              entity_id: "{{ 'button.' + target + '_' + action }}"
+          - action: python_script.set_state
+            data:
+              entity_id: "{{ 'binary_sensor.' + target + '_status' }}"
+              state: rebooting
+            enabled: true
+            alias: Set status to rebooting
+        alias: If Action = Reboot
+      - conditions:
+          - condition: and
+            conditions:
+              - condition: template
+                value_template: "{{ action | lower == 'toggle' }}"
+              - condition: template
+                value_template: "{{ states('binary_sensor.' + target + '_status') == 'on' }}"
+        sequence:
+          - action: button.press
+            metadata: {}
+            data: {}
+            target:
+              entity_id: "{{ 'button.' + target + '_shutdown' }}"
+          - action: python_script.set_state
+            data:
+              entity_id: "{{ 'binary_sensor.' + target + '_status' }}"
+              state: pending
+            enabled: true
+            alias: Set status to pending
+        alias: If Action = Toggle and LXC is On
+      - conditions:
+          - condition: and
+            conditions:
+              - condition: template
+                value_template: "{{ action | lower == \"toggle\" }}"
+              - condition: template
+                value_template: "{{ states('binary_sensor.' + target + '_status') == 'off' }}"
+        sequence:
+          - action: button.press
+            metadata: {}
+            data: {}
+            target:
+              entity_id: "{{ 'button.' + target + '_start' }}"
+          - action: python_script.set_state
+            data:
+              entity_id: "{{ 'binary_sensor.' + target + '_status' }}"
+              state: pending
+            enabled: true
+            alias: Set status to pending
+        alias: If Action = Toggle and LXC is Off
+      - conditions:
+          - condition: and
+            conditions:
+              - condition: template
+                value_template: "{{ states('binary_sensor.' + target + '_status') != 'on' }}"
+              - condition: template
+                value_template: "{{ states('binary_sensor.' + target + '_status') != 'off' }}"
+        sequence: []
+        alias: If action is already in progress
+    enabled: true
+fields:
+  target:
+    selector:
+      text: {}
+    name: target
+    description: The LXC / VM to be acted on
+    required: true
+  action:
+    selector:
+      text: {}
+    name: action
+    description: Action to be performed on the target VM / LXC
+    required: true
+alias: Proxmox LXC Control
+description: Reboots, shuts down or starts a Proxmox LXC/VM based on input fields
+mode: parallel
+max: 10

@@ -3,7 +3,20 @@
 ## Aims
 
 - I want to start, shutdown and or reboot various Proxmox LXCs and VMs from within Home Assistant
-- Using [bubblecard](https://github.com/Clooos/Bubble-Card) for the interface would be good as it will fit with other dashboards
+- Using [Bubble Card](https://github.com/Clooos/Bubble-Card) for the interface would be good as it will fit with other dashboards
+
+## TL:DR
+
+This article presents 
+
+1. A Home Assistant script that can be used to control (start, shutdown, or reboot) multiple Proxmox VE LXCs/VM
+2. A Home Assistant interface element that works with the script to control 4 different Proxmox VE LXCs
+
+The interface buttons use Bubble Card to provide a single button for each LXC including:
+- Status of the LXC (on/off/pending/rebooting)
+- A sub-button to toggle between on/off
+- A sub-button to reboot
+- Sub-button icons change color and change to a spinning 'working' icon during transitions
 
 ## Steps
 
@@ -136,13 +149,84 @@ Thanks to [u/generalambivalence](https://www.reddit.com/user/generalambivalence/
 
 </details>
 
+### Problem - Coping with multiple button presses - Part 1
+
+I've got several Proxmox VM and I don't want to wait for an action to complete on one before I start an action on another (e.g. I want to shutdown 2 VMs)
+
+<details>
+  <summary>Solution</summary>
+
+### Solution
+
+After going back to the Home Assistant docs, I was reminded about [Script Modes](https://www.home-assistant.io/integrations/script#script-modes).
+The full details are in the documentation but in sumamary, scripts be run in 1 of 4 different modes:
+
+- `single`: Do not start a new run.  Issue a warning
+- `restart`: Start a new run after first stopping previous run
+- `queued`: Start a new run after all previous runs complete.  Runs are guaranteed to execute in the order they were queued
+- `parallel`: Start a new, independent run in parrallel with previous runs
+
+For my use-case, `parallel` fits the best as I want to each button press to be treated independently
+
+In yaml, it then looks like this:
+
+```yaml
+mode: parallel
+max: 10
+```
+
+Note, the `max: 10` can be used to limit the number instances of the script that can be running at the same time
+
+Alternatively, if you're making scripts in the user interface, the script mode can be set using the top-right menu:
+
+![Script menu showing modes](./media/script_change_mode.png)
+
+</details>
+
+### Problem - Coping with multiple button presses - Part 2
+
+Each VM has 2 buttons - one for start/shutdown and a 2nd button for reboot.  If I've pressed the button to reboot a machine, I don't want the start/shutdown to be triggered while the reboot is still in progress.
+
+<details>
+  <summary>Solution</summary>
+
+### Solution
+
+To solve this, I'll create an option within my script that will be triggered if the status of the VM being called is anything other than 'on' and 'off'.  The code snippet for this is shown below:
+
+```yaml
+- conditions:
+  - condition: and
+    conditions:
+      - condition: template
+        value_template: "{{ states('binary_sensor.' + target + '_status') != 'on' }}"
+      - condition: template
+        value_template: "{{ states('binary_sensor.' + target + '_status') != 'off' }}"
+sequence: []
+alias: If action is already in progress
+```
+
+</details>
+
+## Result
+
 ### Script Flow
 
 The script flow is shown below:
 
 ![Flow for Proxmox control script](./media/proxmox_control_script.png)
 
-**Insert full script here** %%%%%
+The full script is here:
+
+[Script: Proxmox LXC Control](./scripts/proxmox_lxc_control.yaml)
+
+This works with this set of buttons:
+
+*** Insert button image here (204 - End) ***
+
+The yaml for these buttons is here:
+
+
 
 
 [🔼 Back to top](#proxmox-container-and-virtual-machine-control)
