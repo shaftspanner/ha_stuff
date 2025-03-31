@@ -221,9 +221,9 @@ The full script is here:
 
 This works with this set of buttons:
 
-*** Insert button image here (204 - End) ***
+![Demo of Proxmox VE containers being controled from Home Assistant using Bubble Cards](./media/proxmox_control_full_demo.gif)
 
-The yaml for these buttons is here:
+The yaml for these buttons is [here](./interface_elements/proxmox_control_interface.yaml):
 
 
 
