@@ -1,16 +1,18 @@
 # Proxmox Container and Virtual Machine Control
 
+![Demo of Proxmox VE containers being controled from Home Assistant using Bubble Cards](./media/proxmox_control_full_demo.gif)
+
 ## Aims
 
 - I want to start, shutdown and or reboot various Proxmox LXCs and VMs from within Home Assistant
-- Using [Bubble Card](https://github.com/Clooos/Bubble-Card) for the interface would be good as it will fit with other dashboards
+- Using [Bubble Card](https://github.com/Clooos/Bubble-Card) for the interface would be good as it will fit with some of my other dashboards
 
 ## TL:DR
 
 This article presents 
 
-1. A Home Assistant script that can be used to control (start, shutdown, or reboot) multiple Proxmox VE LXCs/VM
-2. A Home Assistant interface element that works with the script to control 4 different Proxmox VE LXCs
+1. A Home Assistant [script](./scripts/proxmox_lxc_control.yaml) that can be used to control (start, shutdown, or reboot) multiple Proxmox VE LXCs/VM
+2. A Home Assistant [interface element](./interface_elements/proxmox_control_interface.yaml) that works with the script to control 4 different Proxmox VE LXCs
 
 The interface buttons use Bubble Card to provide a single button for each LXC including:
 - Status of the LXC (on/off/pending/rebooting)
@@ -27,9 +29,9 @@ The interface buttons use Bubble Card to provide a single button for each LXC in
 
 ## Proxmox Access
 
-There is a core Proxmox VE integration within home assistant, but there's also a HACS custom intergration that provides some additional capabilities such as allowing you to poll vvarious data and controls from your instance.
+Home Assistant has a built in Proxmox VE integration, but there's also a HACS custom intergration that provides some additional capabilities such as allowing you to poll various data and controls from your instance.
 
-The HACS integration is [here](https://github.com/dougiteixeira/proxmoxve).  This should expose all of your VMs and LXCs as devices but by default entities and sensors are disabled.  You'll need to select which entities will be useful and you want to enable.  
+The HACS integration is [here](https://github.com/dougiteixeira/proxmoxve).  This should expose all of your VMs and LXCs as devices but by default, most entities and sensors are disabled.  You'll need to select which entities will be useful and you want to enable.  
 I've enabled the following controls:
 
 ![Proxmox enabled controls](./media/proxmox_controls.png)
@@ -76,9 +78,6 @@ data:
   state: rebooting
 ```
 
-and here's an example of it in action
-
-**Insert example here** %%%%%
 
 </details>
 
