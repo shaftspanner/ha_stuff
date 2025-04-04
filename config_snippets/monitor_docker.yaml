@@ -1,0 +1,20 @@
+###################################################################
+## Monitor Docker Example Snippet                                ##
+## ------------------------------                                ##
+##                                                               ##
+## Modify as necessary and add to configuration.yaml             ##
+## Full instructions: https://github.com/ualex73/monitor_docker  ##
+###################################################################
+monitor_docker:
+  - name: Docker Server # A nice name for your docker instance
+    url: http://<<DOCKER_PROXY_IP>>:2375
+    buttonenabled: true # Enables the restart button (disabled by default)
+    containers:
+      - esphome
+      - rtl433
+    rename:
+      esphome: "ESPHome" # Optional Give you containers a nicer name in HA if you want
+    monitored_conditions: # Minimum necessary for my needs (there are lots more)
+      - state
+      - status
+      - health

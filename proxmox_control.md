@@ -29,7 +29,7 @@ The interface buttons use Bubble Card to provide a single button for each LXC in
 
 ## Proxmox Access
 
-Home Assistant has a built in Proxmox VE integration, but there's also a HACS custom intergration that provides some additional capabilities such as allowing you to poll various data and controls from your instance.
+Home Assistant has a built in Proxmox VE integration, but there's also a HACS custom integration that provides some additional capabilities such as allowing you to poll various data and controls from your instance.
 
 The HACS integration is [here](https://github.com/dougiteixeira/proxmoxve).  This should expose all of your VMs and LXCs as devices but by default, most entities and sensors are disabled.  You'll need to select which entities will be useful and you want to enable.  
 I've enabled the following controls:

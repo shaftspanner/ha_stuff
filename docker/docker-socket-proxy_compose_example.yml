@@ -1,0 +1,26 @@
+services:
+  dockerproxy:
+    image: ghcr.io/tecnativa/docker-socket-proxy:latest
+    container_name: dockerproxy
+    # privileged: true ## Required in some in some SELinux/AppArmor contexts
+    environment:
+      - CONTAINERS=1 # Allow access to viewing containers
+      - POST=1 # Set to 0 to disallow any POST operations (effectively read-only)
+      - BUILD=1
+      - COMMIT=1
+      - CONFIGS=1
+      - DISTRIBUTION=1
+      - EXEC=1
+      - IMAGES=1
+      - INFO=1
+      - NETWORKS=1
+      - NODES=1
+      - PLUGINS=1
+      - SERVICES=1
+      - SESSION=1
+      - SWARM=1
+    ports:
+      - 2375:2375
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped

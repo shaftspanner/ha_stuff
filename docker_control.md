@@ -1,5 +1,9 @@
 # Docker Container Control in Home Assistant
 
+> [!Warning]
+>
+> This is a work in progress - do not use!
+
 ![Demo of Proxmox VE containers being controled from Home Assistant using Bubble Cards](./media/proxmox_control_full_demo.gif)
 
 > [!NOTE]
@@ -15,78 +19,86 @@
 
 This article presents 
 
-1. A Home Assistant [script](./scripts/proxmox_lxc_control.yaml) that can be used to control (start, shutdown, or reboot) multiple Proxmox VE LXCs/VM
-2. A Home Assistant [interface element](./interface_elements/proxmox_control_interface.yaml) that works with the script to control 4 different Proxmox VE LXCs
+1. Docker-compose and Home Assistant configurations necessary to bring docker containers into Home Assistant as entities
+2. A Home Assistant [script](./scripts/proxmox_lxc_control.yaml) that can be used to control (start, shutdown, or reboot) multiple Proxmox VE LXCs/VM
+3. A Home Assistant [interface element](./interface_elements/proxmox_control_interface.yaml) that works with the script to control 4 different Proxmox VE LXCs
 
-The interface buttons use Bubble Card to provide a single button for each LXC including:
-- Status of the LXC (on/off/pending/rebooting)
+The interface buttons use Bubble Card to provide a single button for each Docker container including:
+
+**UPDATE THIS**
+
+- Status of the container (on/off/pending/rebooting)
+- (if available) Container health
 - A sub-button to toggle between on/off
 - A sub-button to reboot
 - Sub-button icons change color and change to a spinning 'working' icon during transitions
 
 ## Steps
 
-1. Setup [Proxmox access](#proxmox-access) within HA
-2. Setup a [python set_state script](#python-set_state-script)
+1. Setup [Docker access](#Docker-access) within HA
+2. [Provide feedback](#problem---button-presses-are-instantaneous) for button presses
 3. Create the [Bubble Card Buttons](#bubble-card-styling)
 4. Generate [single script to handle multiple conditions](#generate-single-script-to-handle-multiple-conditions) (start/shutdown/reboot)
 
-## Proxmox Access
+## Docker Access
 
-Home Assistant has a built in Proxmox VE integration, but there's also a HACS custom intergration that provides some additional capabilities such as allowing you to poll various data and controls from your instance.
+Home Assistant doesn't have a built in Docker integration, but there's a HACS customer integration that will do the job nicely.  The HACS integration is called [Custom Monitor Docker component for Home Assistant](https://github.com/ualex73/monitor_docker).  The Monitor Docker component allows you to monitor Docker and container statistics and turn on/orr containers.  It can connect to the Docker daemon locally or remotely.  
 
-The HACS integration is [here](https://github.com/dougiteixeira/proxmoxve).  This should expose all of your VMs and LXCs as devices but by default, most entities and sensors are disabled.  You'll need to select which entities will be useful and you want to enable.  
-I've enabled the following controls:
+Full configuration instructions are contained within the repository.  For my specific installation I've chosen to use [Tecnativa's Docker Socket Proxy](https://github.com/Tecnativa/docker-socket-proxy) rather than connecting directly to the docker socket.  I've chosen to do this mainly because I have multple machines running docker and HA isn't necessarily running on the same machine.
 
-![Proxmox enabled controls](./media/proxmox_controls.png)
+### Docker Access Setup 1 - Docker Socket Proxy
 
-and the following sensors:
+Full instructions are [on the Github here](https://github.com/Tecnativa/docker-socket-proxy).  I'm just presenting how I've done it for 1 machine. 
 
-![alt text](./media/proxmox_sensors.png)
+> [!WARNING]
+>
+> Never expose this container's port to a public network.  Only to an internal network necessary for the communication between the proxy and the service that is using it (Home Assistant in this case)
+>
+> Enabling `POST` access to the docker socket has some pretty huge security implications.  Do so at your own risk!
 
-There are more that can be enabled, but I felt these gave me sufficient information for my needs.
+My docker compose is [here](./docker/docker-socket-proxy_compose_example.yml).  I've based this off a question in the [Monitor Docker Q&A](https://github.com/ualex73/monitor_docker#qa)
 
-[🔼 Back to top](#proxmox-container-and-virtual-machine-control)
+### Docker Access Setup 2 - Home Assistant Custom Monitor Component
 
-## Python Set_State Script
+I'm not going to go through adding HACS to Home Assistant - there are a million turorials already written.
+
+**Monitor Docker** is in the main HACs repository, just seach for it and add it the same as you would any other integration.
+
+Configuration of Monitor Docker is done in `configuration.yaml`, there isn't a UI for doing this.  My [sample configuration is here](./config_snippets/monitor_docker.yaml) but as usual, there's far more detail in the [ualex73's github](https://github.com/ualex73/monitor_docker)
+
+For the purposes of my switches, I've only enabled controls for container `state`, `status` and `health` but there's many more that could be added to do other things
+
+This then exposes the following entities:
+
+- `button.<docker-host>_<container>_restart` 
+- `sensor.<docker-host>_<container>`
+- `sensor.<docker-host>_<container>_health`
+- `sensor.<docker-host>_<container>_state`
+- `sensor.<docker-host>_<container>_status`
+- `switch.<docker-host>_<container>`
+
+[🔼 Back to top](#docker-container-control-in-home-assistant)
+
+## Providing User Feedback
 
 ### Problem - Button presses are instantaneous
 
-The Proxmox HA integration exposes buttons to start, shutdown and reboot VMs and LXCs.  However a button press is an instantaneous thing - you press it, a command is sent to Proxmox, but you don't get any feedback until seconds later when the status of the target eventually changes and feeds back to HA.  This leaves you guessing whether the command has actually registered properly.
+The Docker HA integration exposes buttons to reboot a container and a switch to toggle between On and Off.  However a button press is an instantaneous thing - you press it, a command is sent to the docker socket, but you don't get any feedback until seconds later when the status of the target eventually changes and feeds back to HA.  Additionally, the on/off toggle is instantaneous but it takes a finite amount of time for the docker container to react and start or shutdown.
 
+The docker integration polls every 10 seconds (this is configurable), but that's not 10 seconds from when you trigger an action, so you the poll might occur 1 second, 10 seconds (or anything in between) after you trigger the action.  This can leave you guess whether the command has actually registerd properly or may give deceptive feedback if the poll happens before the container has reacted - neither are desirable outcomes.
 
 <details>
   <summary>Solution</summary>
 
 ### Solution
 
-I'm sure there better ways of doing this, but I've chosen to implement a python set_state script.  This lets me change the state of an entity in HA to pretty much anything I want. Note changing this state doesn't actually trigger anything on it's own, and the next time the entity is updated, my set_state command will be overwritten.  For example:
+I'm sure there better ways of doing this, but I'm going to take a very simple approach to this - If I wait for 30 seconds after triggring an action, that should be long enough to ensure a change of state has been triggered.  For this 30 seconds, I'll need to provide some form of feedback, but the spinning waiting icon that I first used in my Proxmox buttons should be sufficient for this.
 
-The entity `binary_sensor.lxc_ollama_206_status` is a binary sensor - it's values can only be `on` and `off` (the HA interface represents these as `Running` and `Not Running` but behind the scenes it's still `on` and `off`).  However by using the python set_state script, I can set the status to (for example) `pending` or `rebooting`.  
-
-Using this, I could build a flow as follows:
-
-![Flow for pressing VM power or reboot buttons](./media/proxmox_button_flow.png)
-
-### The Implementation
-
-All the details have been worked out by [Xannor](https://github.com/xannor/hass_py_set_state/tree/master) as a custom repo that can be added to HACS, however as it's just a python script, it can also be loaded manually.  
-At the time of writing, Xannor's repo hasn't been updated for 6 years, so I've forked the repo [here](https://github.com/shaftspanner/hass_py_set_state).  Note that I loaded the script manually as I didn't want to go through the hassle of reinstalling HACs.
-
-The script can be called using the following:
-
-```yaml
-action: python_script.set_state
-data:
-  entity_id: binary_sensor.lxc_ollama_206_status
-  state: rebooting
-```
-
+![Bubble Card with 2 sub-buttons.  When the each sub-button is clicked, the icon changes to a loading symbol, changes color and rotates](./media/2_rotating_sub_button_icons_with_color_change.gif)
 
 </details>
 
-
-[🔼 Back to top](#proxmox-container-and-virtual-machine-control)
+[🔼 Back to top](#docker-container-control-in-home-assistant)
 
 ## Bubble Card Styling
 
@@ -95,7 +107,7 @@ I spent a lot of time getting the controls to behave the way I wanted.  Key requ
 - 2 sub buttons
     - start / shutdown
     - reboot
-- VM/LXC status displayed (e.g. Running / Not Running)
+- Container status displayed (e.g. Running / Not Running)
 - Visual feedback when the state is changing
     - Change of color / icon as appropriate
     - Spinning wait icons (because it's about time I figured out how to do this!)
@@ -107,14 +119,14 @@ The end result (in a generic button) looks like this:
 All the details for creating this are [here](./bubblecard/bubblecard_styling_snippets.md)
 
 
-[🔼 Back to top](#proxmox-container-and-virtual-machine-control)
+[🔼 Back to top](#docker-container-control-in-home-assistant)
 
 ## Generate single script to handle multiple conditions
 
 ### Problem - Passing Fields to scripts
 
-I need a script that runs when a button is pressed.  Looking at the flow above, for the VM/LXC in question it would then start, shutdown, or reboot the VM/LXC depending on which button is pressed and the current state of the VM/LXC.  
-However, I don't want to create a new script for each scenario, and for each VM/LXC.
+I need a script that runs when a button is pressed.  Looking at the flow above, for the container in question it would then start, shutdown, or reboot depending on which button is pressed and the current state of the continer.  
+However, I don't want to create a new script for each scenario, and for each container.
 
 <details>
   <summary>Solution</summary>
@@ -125,25 +137,31 @@ However, I don't want to create a new script for each scenario, and for each VM/
 
 </details>
 
-### Problem - Choosing which VM/LXC to act on
+### Problem - Choosing which container to act on
 
-At the time of writing, I've got 8 LXCs running and I'd like to control all of them with this script.  How to get the single script acting correctly on each LXC.
+I'm currently running > 40 docker containers across lots of different machines, but for the sake of this example, I'm going to concentrate on 2 containers - `rtl433` and `esphome`, both running on a server called `maggie`. I'd like to control all of them with this script.  How to get the single script acting correctly on each container.
 
 <details>
   <summary>Solution</summary>
 
 ### Solution
 
-All of the LXCs entities have a similar naming convention:  `<<domain>>.<<lxc_name>>_<<entity>>`, so for example:
+All of the container's entities have a similar naming convention:  `<domain>.<server>_<container>`, so for example:
 
-- `binary_sensor.lxc_ollama_206_status` is the status of my Ollama LXC
-- `button.lxc_ollama_206_reboot` is the reboot button for the LXC
-- `button.lxc_ollama_206_shutdown` is the shutdown button for the LXC
-- `button.lxc_ollama_206_start` is the start button for the LXC
+- `sensor.maggie_rtl433_health` is the health of my rtl433 container **(if it includes healthchecks)**
+- `button.maggie_rtl433_restart` is the reboot button for the container
+- `sensor.maggie_rtl433_state` is the state of the container e.g. `running` / `exited`
+- `switch.maggie_rtl433` is an on/off switch for the container
 
-so if the script has fields for `target` (the LXC name) and `action` (start, shutdown, or reboot) I can use the following templates:
+so if the script has fields for:
 
-- `value_template: "{{ action | lower == \"toggle\" }}"` is true if action = `toggle` - substitute `reboot` if required
+- `server` (the docker instance that the container is running on)
+- `container` (the name of the docker container)
+- `action` (start, shutdown, or reboot)...
+
+I can use the following templates:  **CONTINUE WORK FROM HERE**
+
+- `value_template: "{{ action | lower == 'toggle' }}"` is true if action = `toggle` - substitute `reboot` if required
 - `entity_id: "{{ 'binary_sensor.' + target + '_status' }}"` is the target entity status
 - `value_template: "{{ states('binary_sensor.' + target + '_status') == 'on' }}"` is true if the target status is `on` - substitute `off` if required
 - `entity_id: "{{ 'button.' + target + '_' + action }}"` is the target entity's button (for start, shutdown, or stop)
@@ -232,7 +250,7 @@ The yaml for these buttons is [here](./interface_elements/proxmox_control_interf
 
 
 
-[🔼 Back to top](#proxmox-container-and-virtual-machine-control)
+[🔼 Back to top](#docker-container-control-in-home-assistant)
 
 ## Credits
 
@@ -244,6 +262,6 @@ Thanks to
 - [u/domwrap](https://www.reddit.com/user/domwrap/) who pointed me towards fields for scripts
 - [u/generalambivalence](https://www.reddit.com/user/generalambivalence/) and [u/matzman666](https://www.reddit.com/user/matzman666/) for helping me with the templates
 
-[🔼 Back to top](#proxmox-container-and-virtual-machine-control)
+[🔼 Back to top](#docker-container-control-in-home-assistant)
 
 
