@@ -1,0 +1,87 @@
+sequence:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ action | lower == 'reboot' }}"
+        sequence:
+          - action: input_text.set_value
+            target:
+              entity_id: input_text.docker_control
+            data:
+              value: "{{ server + '_' + container + '_' + action | lower }}"
+            alias: Set text helper to "<<container>>_reboot"
+          - action: button.press
+            metadata: {}
+            data: {}
+            target:
+              entity_id: "{{ 'button.' + server + '_' + container + '_restart' }}"
+            enabled: true
+            alias: Press Reboot button
+          - delay:
+              hours: 0
+              minutes: 0
+              seconds: 10
+              milliseconds: 0
+          - alias: Set text helper to ""
+            action: input_text.set_value
+            target:
+              entity_id: input_text.docker_control
+            data:
+              value: idle
+        alias: If Action = Reboot
+      - conditions:
+          - condition: and
+            conditions:
+              - condition: template
+                value_template: "{{ action | lower == 'toggle' }}"
+            alias: If 'action' = toggle
+        sequence:
+          - action: input_text.set_value
+            target:
+              entity_id: input_text.docker_control
+            data:
+              value: >-
+                {{ server + '_' + container + '_' + states('switch.' + server +
+                '_' + container) }}
+            alias: Set text helper to "<container>_<container_state>"
+          - action: switch.toggle
+            target:
+              entity_id: "{{ 'switch.' + server + '_' + container }}"
+            data: {}
+            enabled: true
+          - delay:
+              hours: 0
+              minutes: 0
+              seconds: 10
+              milliseconds: 0
+          - alias: Set text helper to ""
+            action: input_text.set_value
+            target:
+              entity_id: input_text.docker_control
+            data:
+              value: idle
+        alias: If Action = Toggle
+    enabled: true
+fields:
+  server:
+    selector:
+      text: null
+    name: server
+    description: The serverto be acted on
+    required: true
+  container:
+    selector:
+      text: {}
+    name: container
+    description: The container to be acted on
+    required: true
+  action:
+    selector:
+      text: {}
+    name: action
+    description: Action to be performed on the target VM / LXC
+    required: true
+alias: Docker Container Control
+description: Reboots, shuts down or starts a Docker Container based on input fields
+mode: queued
+max: 10

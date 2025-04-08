@@ -22,10 +22,39 @@ input_boolean:
 
 ## Index
 
+- [Conditionally Change Icon Color](#icon_color)
 - [Rotating Icon](#rotating-icon)
 - [Rotating Sub-Button Icon](#rotating-sub-button-icon)
 - [Rotating Sub-Button-1 with Color Change](#rotating-sub-button-1-with-color-change)
 - [2 Rotating Sub-buttons with Color and Icon Change](#2-rotating-sub-buttons-with-color-and-icon-change)
+
+## Conditionally Change Icon Color
+
+![Bubble Card button with icon that changes color when the button is clicked](../media/conditional_icon_color_change.gif)
+
+The main icon color changes based on the value of another entity 
+
+<details>
+  <summary>YAML Code</summary>
+
+```yaml
+type: custom:bubble-card
+card_type: button
+button_type: state
+entity: input_boolean.temp_toggle
+name: Color Change Icon
+styles: |-
+  .bubble-icon {
+    color: ${hass.states['input_boolean.temp_toggle'].state === 'on' ? 'rgb(0, 204, 0)' : ''} !important;
+  }
+button_action:
+  tap_action:
+    action: toggle
+```
+</details>
+
+[🔼 Back to top](#bubble-card-styling-snippets)
+
 
 ## Rotating Icon
 

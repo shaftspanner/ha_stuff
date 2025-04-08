@@ -187,7 +187,7 @@ Thanks to [u/generalambivalence](https://www.reddit.com/user/generalambivalence/
 
 ### Problem - Coping with multiple button presses - Part 1
 
-In the Proxmox version of this script, I wanted to be able to trigger actions on several containers at once since the poll rate for the Proxmox integration was slow (~30sec) and VMs/LXCs could take some time to start up or shut down.  Docker tends to work faster than this, so to avoid complications (particularly with the helper entity that is external to the control script, I don't want more than one instance of the script running at a time.
+In the Proxmox version of this script, I wanted to be able to trigger actions on several containers at once since the poll rate for the Proxmox integration was slow (~30sec) and VMs/LXCs could take some time to start up or shut down.  Docker tends to work faster than this, so to avoid complications (particularly with the helper entity that is external to the control script), I don't want more than one instance of the script running at a time.
 
 <details>
   <summary>Solution</summary>
@@ -229,13 +229,15 @@ The script flow is shown below:
 
 The full script is here:
 
-[Script: Docker Container Control](./scripts/proxmox_lxc_control.yaml)
+[Script: Docker Container Control](./scripts/docker_container_control.yaml)
 
 This works with this set of buttons:
 
 ![Demo of Proxmox VE containers being controled from Home Assistant using Bubble Cards](./media/proxmox_control_full_demo.gif)
 
-The yaml for these buttons is [here](./interface_elements/proxmox_control_interface.yaml):
+The yaml for these buttons is [here](./interface_elements/proxmox_control_interface.yaml)
+
+and the yaml for a sample button with how to adapt it for your own containers is [here](./interface_elements/docker_control_sample.yaml)
 
 [🔼 Back to top](#docker-container-control-in-home-assistant)
 
