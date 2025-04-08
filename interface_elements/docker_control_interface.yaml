@@ -1,0 +1,222 @@
+type: vertical-stack
+cards:
+  - type: custom:bubble-card
+    card_type: button
+    button_type: state
+    entity: sensor.maggie_rtl433_state
+    sub_button:
+      - entity: switch.maggie_rtl433
+        name: Start
+        tap_action:
+          action: perform-action
+          perform_action: script.docker_container_control
+          target: {}
+          data:
+            server: maggie
+            container: rtl433
+            action: toggle
+        icon: mdi:server
+      - entity: button.maggie_rtl433_restart
+        show_icon: true
+        name: Reboot
+        icon: mdi:restart
+        tap_action:
+          action: perform-action
+          perform_action: script.docker_container_control
+          target: {}
+          data:
+            server: maggie
+            container: rtl433
+            action: reboot
+    name: rtl433
+    styles: >-
+      .bubble-icon {
+        color: ${hass.states['sensor.maggie_rtl433_health'].state === 'healthy' ? 'rgb(0, 204, 0)' : ''} !important;
+      } .bubble-sub-button-1 { 
+        background-color: ${hass.states['input_text.docker_control'].state === 'maggie_rtl433_on' ? 'rgb(230, 128, 41)' 
+          : hass.states['input_text.docker_control'].state === 'maggie_rtl433_off' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)'  } !important;
+        animation: ${hass.states['input_text.docker_control'].state === 'maggie_rtl433_on' ? 'slow-rotate 2s linear infinite'
+          : hass.states['input_text.docker_control'].state === 'maggie_rtl433_off' ? 'slow-rotate 2s linear infinite' :''};
+      }   .bubble-sub-button-2 { 
+        background-color: ${hass.states['input_text.docker_control'].state === 'maggie_rtl433_reboot' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)' } !important;
+        animation: ${hass.states['input_text.docker_control'].state === 'maggie_rtl433_reboot' ? 'slow-rotate 2s linear infinite' : ''};
+      } 
+
+      @keyframes slow-rotate { 
+        0% { transform: rotate(0deg); } 
+        100% { transform: rotate(360deg); } 
+      }
+
+      ${subButtonIcon[0].setAttribute("icon",
+      hass.states['input_text.docker_control'].state === 'maggie_rtl433_on' ?
+      'mdi:loading' 
+         : hass.states['input_text.docker_control'].state === 'maggie_rtl433_off' ? 'mdi:loading' 
+         : hass.states['switch.maggie_rtl433'].state === 'on' ? 'mdi:server-off' :'mdi:server' )}
+      ${subButtonIcon[1].setAttribute("icon",
+      hass.states['input_text.docker_control'].state === 'maggie_rtl433_reboot'
+      ? 'mdi:loading' :'mdi:reload' )}          
+  - type: custom:bubble-card
+    card_type: button
+    button_type: state
+    entity: sensor.maggie_esphome_state
+    sub_button:
+      - entity: switch.maggie_esphome
+        name: Start
+        tap_action:
+          action: perform-action
+          perform_action: script.docker_container_control
+          target: {}
+          data:
+            server: maggie
+            container: esphome
+            action: toggle
+        icon: mdi:server
+      - entity: button.maggie_esphome_restart
+        show_icon: true
+        name: Reboot
+        icon: mdi:restart
+        tap_action:
+          action: perform-action
+          perform_action: script.docker_container_control
+          target: {}
+          data:
+            server: maggie
+            container: esphome
+            action: reboot
+    name: esphome
+    styles: >-
+      .bubble-icon {
+        color: ${hass.states['sensor.maggie_esphome_health'].state === 'healthy' ? 'rgb(0, 204, 0)' : ''} !important;
+      } .bubble-sub-button-1 { 
+        background-color: ${hass.states['input_text.docker_control'].state === 'maggie_esphome_on' ? 'rgb(230, 128, 41)' 
+          : hass.states['input_text.docker_control'].state === 'maggie_esphome_off' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)'  } !important;
+        animation: ${hass.states['input_text.docker_control'].state === 'maggie_esphome_on' ? 'slow-rotate 2s linear infinite'
+          : hass.states['input_text.docker_control'].state === 'maggie_esphome_off' ? 'slow-rotate 2s linear infinite' :''};
+      }   .bubble-sub-button-2 { 
+        background-color: ${hass.states['input_text.docker_control'].state === 'maggie_esphome_reboot' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)' } !important;
+        animation: ${hass.states['input_text.docker_control'].state === 'maggie_esphome_reboot' ? 'slow-rotate 2s linear infinite' : ''};
+      } 
+
+      @keyframes slow-rotate { 
+        0% { transform: rotate(0deg); } 
+        100% { transform: rotate(360deg); } 
+      }
+
+      ${subButtonIcon[0].setAttribute("icon",
+      hass.states['input_text.docker_control'].state === 'maggie_esphome_on' ?
+      'mdi:loading' 
+         : hass.states['input_text.docker_control'].state === 'maggie_esphome_off' ? 'mdi:loading' 
+         : hass.states['switch.maggie_esphome'].state === 'on' ? 'mdi:server-off' :'mdi:server' )}
+      ${subButtonIcon[1].setAttribute("icon",
+      hass.states['input_text.docker_control'].state === 'maggie_esphome_reboot'
+      ? 'mdi:loading' :'mdi:reload' )}          
+  - type: custom:bubble-card
+    card_type: button
+    button_type: state
+    entity: sensor.maggie_mqtt_explorer_state
+    sub_button:
+      - entity: switch.maggie_mqtt_explorer
+        name: Start
+        tap_action:
+          action: perform-action
+          perform_action: script.docker_container_control
+          target: {}
+          data:
+            server: maggie
+            container: mqtt_explorer
+            action: toggle
+        icon: mdi:server
+      - entity: button.maggie_mqtt_explorer_restart
+        show_icon: true
+        name: Reboot
+        icon: mdi:restart
+        tap_action:
+          action: perform-action
+          perform_action: script.docker_container_control
+          target: {}
+          data:
+            server: maggie
+            container: mqtt_explorer
+            action: reboot
+    name: mqtt_explorer
+    styles: >-
+      .bubble-icon {
+        color: ${hass.states['sensor.maggie_mqtt_explorer_health'].state === 'healthy' ? 'rgb(0, 204, 0)' : ''} !important;
+      } .bubble-sub-button-1 { 
+        background-color: ${hass.states['input_text.docker_control'].state === 'maggie_mqtt_explorer_on' ? 'rgb(230, 128, 41)' 
+          : hass.states['input_text.docker_control'].state === 'maggie_mqtt_explorer_off' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)'  } !important;
+        animation: ${hass.states['input_text.docker_control'].state === 'maggie_mqtt_explorer_on' ? 'slow-rotate 2s linear infinite'
+          : hass.states['input_text.docker_control'].state === 'maggie_mqtt_explorer_off' ? 'slow-rotate 2s linear infinite' :''};
+      }   .bubble-sub-button-2 { 
+        background-color: ${hass.states['input_text.docker_control'].state === 'maggie_mqtt_explorer_reboot' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)' } !important;
+        animation: ${hass.states['input_text.docker_control'].state === 'maggie_mqtt_explorer_reboot' ? 'slow-rotate 2s linear infinite' : ''};
+      } 
+
+      @keyframes slow-rotate { 
+        0% { transform: rotate(0deg); } 
+        100% { transform: rotate(360deg); } 
+      }
+
+      ${subButtonIcon[0].setAttribute("icon",
+      hass.states['input_text.docker_control'].state ===
+      'maggie_mqtt_explorer_on' ? 'mdi:loading' 
+         : hass.states['input_text.docker_control'].state === 'maggie_mqtt_explorer_off' ? 'mdi:loading' 
+         : hass.states['switch.maggie_mqtt_explorer'].state === 'on' ? 'mdi:server-off' :'mdi:server' )}
+      ${subButtonIcon[1].setAttribute("icon",
+      hass.states['input_text.docker_control'].state ===
+      'maggie_mqtt_explorer_reboot' ? 'mdi:loading' :'mdi:reload' )}          
+  - type: custom:bubble-card
+    card_type: button
+    button_type: state
+    entity: sensor.maggie_hass_state
+    sub_button:
+      - entity: switch.maggie_hass
+        name: Start
+        tap_action:
+          action: perform-action
+          perform_action: script.docker_container_control
+          target: {}
+          data:
+            server: maggie
+            container: hass
+            action: toggle
+        icon: mdi:server
+      - entity: button.maggie_hass_restart
+        show_icon: true
+        name: Reboot
+        icon: mdi:restart
+        tap_action:
+          action: perform-action
+          perform_action: script.docker_container_control
+          target: {}
+          data:
+            server: maggie
+            container: hass
+            action: reboot
+    name: hass
+    styles: >-
+      .bubble-icon {
+        color: ${hass.states['sensor.maggie_hass_health'].state === 'healthy' ? 'rgb(0, 204, 0)' : ''} !important;
+      } .bubble-sub-button-1 { 
+        background-color: ${hass.states['input_text.docker_control'].state === 'maggie_hass_on' ? 'rgb(230, 128, 41)' 
+          : hass.states['input_text.docker_control'].state === 'maggie_hass_off' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)'  } !important;
+        animation: ${hass.states['input_text.docker_control'].state === 'maggie_hass_on' ? 'slow-rotate 2s linear infinite'
+          : hass.states['input_text.docker_control'].state === 'maggie_hass_off' ? 'slow-rotate 2s linear infinite' :''};
+      }   .bubble-sub-button-2 { 
+        background-color: ${hass.states['input_text.docker_control'].state === 'maggie_hass_reboot' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)' } !important;
+        animation: ${hass.states['input_text.docker_control'].state === 'maggie_hass_reboot' ? 'slow-rotate 2s linear infinite' : ''};
+      } 
+
+      @keyframes slow-rotate { 
+        0% { transform: rotate(0deg); } 
+        100% { transform: rotate(360deg); } 
+      }
+
+      ${subButtonIcon[0].setAttribute("icon",
+      hass.states['input_text.docker_control'].state === 'maggie_hass_on' ?
+      'mdi:loading' 
+         : hass.states['input_text.docker_control'].state === 'maggie_hass_off' ? 'mdi:loading' 
+         : hass.states['switch.maggie_hass'].state === 'on' ? 'mdi:server-off' :'mdi:server' )}
+      ${subButtonIcon[1].setAttribute("icon",
+      hass.states['input_text.docker_control'].state === 'maggie_hass_reboot' ?
+      'mdi:loading' :'mdi:reload' )}          

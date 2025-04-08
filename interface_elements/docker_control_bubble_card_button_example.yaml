@@ -1,0 +1,55 @@
+type: custom:bubble-card   # Example Bubble Card to work with the docker control script
+card_type: button          # Replace all instances of <server> with your docker server name
+button_type: state         # Replace all instances of <container> with your docker container name
+entity: sensor.<server>_<container>_state
+sub_button:
+  - entity: switch.<server>_<container>
+    name: Start
+    tap_action:
+      action: perform-action
+      perform_action: script.docker_container_control
+      target: {}
+      data:
+        server: <server>
+        container: <container>
+        action: toggle
+    icon: mdi:server
+  - entity: button.<server>_<container>_restart
+    show_icon: true
+    name: Reboot
+    icon: mdi:restart
+    tap_action:
+      action: perform-action
+      perform_action: script.docker_container_control
+      target: {}
+      data:
+        server: <server>
+        container: <container>
+        action: reboot
+name: <container>
+styles: >-
+  .bubble-icon {
+    color: ${hass.states['sensor.<server>_<container>_health'].state === 'healthy' ? 'rgb(0, 204, 0)' : ''} !important;
+  } .bubble-sub-button-1 { 
+    background-color: ${hass.states['input_text.docker_control'].state === '<server>_<container>_on' ? 'rgb(230, 128, 41)' 
+      : hass.states['input_text.docker_control'].state === '<server>_<container>_off' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)'  } !important;
+    animation: ${hass.states['input_text.docker_control'].state === '<server>_<container>_on' ? 'slow-rotate 2s linear infinite'
+      : hass.states['input_text.docker_control'].state === '<server>_<container>_off' ? 'slow-rotate 2s linear infinite' :''};
+  }   .bubble-sub-button-2 { 
+    background-color: ${hass.states['input_text.docker_control'].state === '<server>_<container>_reboot' ? 'rgb(230, 128, 41)' : 'rgb(1, 1, 1)' } !important;
+    animation: ${hass.states['input_text.docker_control'].state === '<server>_<container>_reboot' ? 'slow-rotate 2s linear infinite' : ''};
+  } 
+
+  @keyframes slow-rotate { 
+    0% { transform: rotate(0deg); } 
+    100% { transform: rotate(360deg); } 
+  }
+
+  ${subButtonIcon[0].setAttribute("icon",
+  hass.states['input_text.docker_control'].state === '<server>_<container>_on' ?
+  'mdi:loading' 
+     : hass.states['input_text.docker_control'].state === '<server>_<container>_off' ? 'mdi:loading' 
+     : hass.states['switch.<server>_<container>'].state === 'on' ? 'mdi:server-off' :'mdi:server' )}
+  ${subButtonIcon[1].setAttribute("icon",
+  hass.states['input_text.docker_control'].state === '<server>_<container>_reboot' ?
+  'mdi:loading' :'mdi:reload' )}          

@@ -4,7 +4,7 @@
 >
 > This is a work in progress - do not use!
 
-![Demo of Proxmox VE containers being controled from Home Assistant using Bubble Cards](./media/proxmox_control_full_demo.gif)
+![Demo of Docker containers being controled from Home Assistant using Bubble Cards](./media/docker_control_full_demo.gif)
 
 > [!NOTE]
 > This is a modified version of my [Proxmox Container and Virtual Machine Control](./proxmox_control.md) write-up 
@@ -17,15 +17,13 @@
 
 ## TL:DR
 
-This article presents **TO BE UPDATED**
+This article presents: 
 
 1. Docker-compose and Home Assistant configurations necessary to bring docker containers into Home Assistant as entities
-2. A Home Assistant [script](./scripts/proxmox_lxc_control.yaml) **UPDATE LINK** that can be used to control (start, shutdown, or reboot) multiple Docker containers
-3. A Home Assistant [interface element](./interface_elements/proxmox_control_interface.yaml) **UPDATE LINK** that works with the script to control Docker containers
+2. A Home Assistant [script](./scripts/docker_container_control.yaml) that can be used to control (start, shutdown, or reboot) multiple Docker containers
+3. A Home Assistant [interface element](./interface_elements/docker_control_interface.yaml) and an [example button template](./interface_elements/docker_control_bubble_card_button_example.yaml) that works with the script to control Docker containers
 
 The interface buttons use Bubble Card to provide a single button for each Docker container including:
-
-**UPDATE THIS**
 
 - Status of the container (on/off/pending/rebooting)
 - (if available) Container health
@@ -115,17 +113,17 @@ The docker integration polls every 10 seconds (this is configurable), but that's
 
 I had to think about this for a while.  Initially I thought I'd just wait for 30 seconds after triggering an action, but for docker containers, that can be a very long time even if I provide feedback.  
 
-For my [Proxmox Control example](./proxmox_control.md) I used a Bubble Card with 2 sub-buttons; when each sub-button is clicked, the icon changes color, changes to a loading symbol and rotates while the change of state happens (see example below)
+For my [Proxmox Control example](./proxmox_control.md) I used a Bubble Card with 2 sub-buttons; when each sub-button is clicked, the icon changes color, changes to a loading symbol and rotates while the change of state happens (see example below).
 
 ![Bubble Card with 2 sub-buttons.  When the each sub-button is clicked, the icon changes to a loading symbol, changes color and rotates](./media/2_rotating_sub_button_icons_with_color_change.gif)
 
 I think I can use something similar for this example.
 
-- For start and shutdown, if I compare the state of the container before the action (on/off) to the current state, I should be able to detect if the action has completed successfully.  However the Bubble Card above relies on detecting a specific state of an entity in order to trigger the waiting indicator, so I'll use a helper to hold this state
+- For start and shutdown, I initially thought about comparing the state of the container before the action (on/off) to the current state, I should be able to detect if the action has completed successfully.  However the Bubble Card above relies on detecting a specific state of an entity in order to trigger the waiting indicator, so I'll use a helper to hold this state.  This approach proved rather difficult so in the interest of time, I resorted to the same approach that I've used for reboots - I might come back to this at a later time
 
 - For reboots, the problem is slightly different - the beginning and end state of the container state will be the same (before and after state are both `on`) however I could use the same helper to hold a value that will trigger the button waiting state for 10 seconds before returning to the reboot icon - that will be long enough to cover the polling delay
 
-I've illustrated this flow below
+I've illustrated this flow below (including my initial thoughts on comparing values for the toggle state)
 
 ![Illustrative flow to trigger waiting icon on on/off toggle or reboot press](./media/docker_waiting_flow.png)
 
@@ -138,14 +136,14 @@ I've illustrated this flow below
 ### Problem - Passing Fields to scripts
 
 I need a script that runs when a button is pressed.  Looking at the flow above, for the container in question it would then start, shutdown, or reboot depending on which button is pressed and the current state of the continer.  
-However, I don't want to create a new script for each scenario, and for each container.
+However, I don't want to create a new script for each scenario, or for each container.
 
 <details>
   <summary>Solution</summary>
 
 ### Solution
 
-[u/domwrap](https://www.reddit.com/user/domwrap/) kindly suggested the use of fields within the script. The full details are in the [Home Assistant documentation](https://www.home-assistant.io/integrations/script), but in summary, as part of the action, variables can be passed along to a script so they become available within templates in that script.  To configure a script to accept variables using the UI, the variables can be added as fields in the script editor.
+[u/domwrap](https://www.reddit.com/user/domwrap/) kindly suggested the use of fields within the script. The full details are in the [Home Assistant documentation](https://www.home-assistant.io/integrations/script), but in summary, as part of the action, variables can be passed to a script so they become available within templates in that script.  To configure a script to accept variables using the UI, the variables can be added as fields in the script editor.
 
 </details>
 
@@ -185,7 +183,7 @@ Thanks to [u/generalambivalence](https://www.reddit.com/user/generalambivalence/
 
 </details>
 
-### Problem - Coping with multiple button presses - Part 1
+### Problem - Coping with multiple button presses
 
 In the Proxmox version of this script, I wanted to be able to trigger actions on several containers at once since the poll rate for the Proxmox integration was slow (~30sec) and VMs/LXCs could take some time to start up or shut down.  Docker tends to work faster than this, so to avoid complications (particularly with the helper entity that is external to the control script), I don't want more than one instance of the script running at a time.
 
@@ -233,11 +231,11 @@ The full script is here:
 
 This works with this set of buttons:
 
-![Demo of Proxmox VE containers being controled from Home Assistant using Bubble Cards](./media/proxmox_control_full_demo.gif)
+![Demo of Docker containers being controled from Home Assistant using Bubble Cards](./media/docker_control_full_demo.gif)
 
-The yaml for these buttons is [here](./interface_elements/proxmox_control_interface.yaml)
+The yaml for these buttons is [here](./interface_elements/docker_control_interface.yaml)
 
-and the yaml for a sample button with how to adapt it for your own containers is [here](./interface_elements/docker_control_sample.yaml)
+and the yaml for a sample button with how to adapt it for your own containers is [here](./interface_elements/docker_control_bubble_card_button_example.yaml)
 
 [🔼 Back to top](#docker-container-control-in-home-assistant)
 
