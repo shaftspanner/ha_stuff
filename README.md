@@ -22,3 +22,5 @@ Controlling Docker containers using Home Assistant.  This is a modified version 
 - Bubble Card styling
 - Scripts
 - Passing fields to scripts
+
+Link: [Docker Container Control](./docker_control.md)
