@@ -1,9 +1,5 @@
 # Docker Container Control in Home Assistant
 
-> [!Warning]
->
-> This is a work in progress - do not use!
-
 ![Demo of Docker containers being controled from Home Assistant using Bubble Cards](./media/docker_control_full_demo.gif)
 
 > [!NOTE]
