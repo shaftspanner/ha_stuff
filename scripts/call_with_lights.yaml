@@ -1,0 +1,34 @@
+sequence:
+  - repeat:
+      count: 3
+      sequence:
+        - action: light.toggle
+          metadata: {}
+          data: {}
+          target:
+            entity_id: "{{ light }}"
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 1
+            milliseconds: 0
+        - action: light.toggle
+          metadata: {}
+          data: {}
+          target:
+            entity_id: "{{ light }}"
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 1
+            milliseconds: 0
+alias: Call with lights
+description: ""
+icon: mdi:alarm-light-off
+fields:
+  light:
+    selector:
+      entity: {}
+    name: Light
+    description: Light to be toggled
+    required: true

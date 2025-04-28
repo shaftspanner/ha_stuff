@@ -24,3 +24,11 @@ Controlling Docker containers using Home Assistant.  This is a modified version 
 - Passing fields to scripts
 
 Link: [Docker Container Control](./docker_control.md)
+
+## Signal Lights
+
+Use lights as a signal to alert someone to something!
+
+This is a simple script with a field that allows you to flash any `on`/`off` light, returning the light to its original state after the script has run
+
+Link: [Signal Lights](./signal_lights.md)
