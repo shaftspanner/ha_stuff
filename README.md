@@ -2,6 +2,10 @@
 
 This is my repository for sorting some ideas and projects using Home Assistant
 
+## Automations
+
+ - [**Automatic Porch Light**](./automations/automatic_porch_light.md).  Turn on the porch light at night if the front door is opened, or if the Ring doorbell detects motion
+
 ## Proxmox Control
 
 Controlling Proxmox VE virtual machines and LXCs using Home Assistant.  Topics explored:
