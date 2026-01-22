@@ -2,6 +2,10 @@
 
 This is my repository for sorting some ideas and projects using Home Assistant
 
+## Pangolin Public Resource Control from Home Assistant
+
+- [**Pangolin Resource Control**](./pangolin_control.md).  Enable or Disable a Pangolin public resource from within Home Assistant using RESTful commands and the Pangolin Integration API
+
 ## Automations
 
  - [**Automatic Porch Light**](./automations/automatic_porch_light.md).  Turn on the porch light at night if the front door is opened, or if the Ring doorbell detects motion
