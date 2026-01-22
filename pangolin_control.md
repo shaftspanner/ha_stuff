@@ -34,10 +34,10 @@ The basics are covered but this is a work in progress.  Other things I'd like to
 ## Steps
 
 1. Enable the Pangolin Integration API.  I'm not going to cover this in detail - there is an excellent writeup in the [Pangolin Docs](https://docs.pangolin.net/self-host/advanced/integration-api).  To confirm the Integration API is working for your instance, got to https://api.my.domain/v1/docs.  If the Swagger docs for the API load, your API is enabled and working
-2. In your Pangolin instance, create an [Organization API Key](#organization_api_key)
-3. [Test the required commands](#test_the_required_api_calls) and gather required information
-4. [Setup RESTful commands](#setup_restful_commands) in Home Assistant
-5. [Call the commands](#call_the_commands) from within Home Assistant
+2. In your Pangolin instance, create an [Organization API Key](#organization-api-key)
+3. [Test the required commands](#test-the-required-api-calls) and gather required information
+4. [Setup RESTful commands](#setup-restful-commands) in Home Assistant
+5. [Call the commands](#call-the-commands) from within Home Assistant
 
 ## Organization API Key
 
